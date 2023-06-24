@@ -7,3 +7,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 MainWindow::~MainWindow() {
   NULL;
 }
+
+void MainWindow::launch() {
+  for (auto& component : componentList) component.show();
+}
