@@ -8,6 +8,16 @@ class MainWindow final : public QMainWindow {
   Q_OBJECT
 
 private:
+  static constexpr int welcomeDefaultWidth = 400;
+  static constexpr int welcomeDefaultHeight = 400;
+  static constexpr int gameDefaultWidth = 400;
+  static constexpr int gameDefaultHeight = 400;
+
+  int welcomeWidth = welcomeDefaultWidth;
+  int welcomeHeight = welcomeDefaultHeight;
+  int gameWidth = gameDefaultWidth;
+  int gameHeight = gameDefaultHeight;
+
   std::list<QWidget> componentList;
 
 public:
