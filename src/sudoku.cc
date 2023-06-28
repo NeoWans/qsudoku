@@ -49,7 +49,7 @@ int* solve_sudoku_t::solve(int* now) {
   return nullptr;
 }
 
-int* solve_sudoku_t::create_sudoku_table() {
+int* solve_sudoku_t::generate_solution() {
   static std::random_device rd;
   static std::mt19937 mt(rd());
   std::uniform_int_distribution dist(1, 9);
@@ -142,9 +142,9 @@ std::pair<int*, int*> solve_sudoku_t::create_sudoku(int level) {
       init_cnt_high = 50;
       break;
   }
-  int* solution = create_sudoku_table();
+  int* solution = generate_solution();
   while(solution == nullptr) {
-    solution = create_sudoku_table();
+    solution = generate_solution();
   };
   for(int i = 0; i < 81; i ++)
     field[i] = solution[i];
