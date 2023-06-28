@@ -11,7 +11,10 @@ void MainWindow::welcomeActivity() {
   fitComponent = nullptr;
 
   setWindowFlags(
-    windowFlags() | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+    Qt::Window | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+  show();
+  setMinimumSize(0, 0);
+  setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
   // TODO
   // setAttribute(Qt::WA_TranslucentBackground);
 

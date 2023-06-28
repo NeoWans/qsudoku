@@ -2,8 +2,8 @@
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
   driverSudoku.reset(new solve_sudoku_t);
-  welcomeActivity();
-  // gameActivity();
+  // welcomeActivity();
+  gameActivity();
 }
 
 MainWindow::~MainWindow() {

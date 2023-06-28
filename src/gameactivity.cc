@@ -3,8 +3,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPushButton>
-#include <QDialog>
-#include <QLabel>
 
 #include "neocc.h"
 
@@ -34,6 +32,7 @@ void MainWindow::gameActivity() {
   show();
   setMinimumSize(0, 0);
   setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+  setWindowTitle("QSudoku");
 
   int aw = gameDefaultWidth;
   int ah = gameDefaultHeight;
@@ -108,6 +107,11 @@ void MainWindow::gameActivity() {
 
       if (arrayEqual(this->game, this->answer)) {
         std::cerr << "Game over" << std::endl;
+        this->setWindowTitle("Congratulations! You have cleared the game!");
+        const auto order = this->sudokuOrder;
+        const auto ssorder = square(square(order));
+        for (size_t i = 0; i < ssorder; ++i)
+          this->componentList[i]->setDisabled(true);
       }
     });
     componentList.emplace_back(btn);
