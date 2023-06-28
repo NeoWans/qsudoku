@@ -53,7 +53,10 @@ void gen_batched_puzzle() {
       sol = res.first;
       puzzle = res.second;
     } else {
-      sol = sudoku.generate_solution();
+      int* sol;
+      do {
+        sol = sudoku.generate_solution();
+      } while (sol == nullptr);
       puzzle = sudoku.generate_puzzle(r, R);
     }
     for (unsigned i = 0; i < sorder; ++i)
@@ -67,7 +70,10 @@ void gen_batched_puzzle() {
 void gen_final() {
   using namespace std;
   for (int i = 0; i < c; ++i) {
-    auto sol = sudoku.generate_solution();
+    int* sol;
+    do {
+      sol = sudoku.generate_solution();
+    } while (sol == nullptr);
     for (unsigned i = 0; i < sorder; ++i)
       for (unsigned j = 0; j < sorder; ++j) {
         cout << sol[i * sorder + j] << " \n"[j + 1 == sorder];
