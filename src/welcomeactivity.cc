@@ -7,7 +7,7 @@
 
 void MainWindow::welcomeActivity() {
   componentList.clear();
-  fitComponent = &MainWindow::fitWelcomeComponent;
+  fitComponent = &MainWindow::welcomeFitComponent;
 
   setWindowFlags(
     windowFlags() | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
@@ -24,6 +24,6 @@ void MainWindow::welcomeActivity() {
   launch();
 }
 
-void MainWindow::fitWelcomeComponent() {
+void MainWindow::welcomeFitComponent() {
 
 }

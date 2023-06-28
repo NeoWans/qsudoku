@@ -1,3 +1,5 @@
+#ifndef _SUDOKU_H_
+#define _SUDOKU_H_
 #include "dancelink.h"
 
 class solve_sudoku_t {
@@ -17,3 +19,4 @@ public:
   int* generate_solution();
   int* solve(int now[81]);
 };
+#endif  // _SUDOKU_H_

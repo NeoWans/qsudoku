@@ -9,7 +9,7 @@
 }
 
 signed main(int argc, char* argv[]) {
-  if (argc == 1) {
+  if (argc == 1 || argc == 2 && argv[1] == std::string("gui")) {
     QApplication a(argc, argv);
     MainWindow w;
     w.show();

@@ -1,3 +1,6 @@
+#ifndef _DANCELINK_H_
+#define _DANCELINK_H_
+
 #include <bits/stdc++.h>
 
 struct DLX {
@@ -68,3 +71,5 @@ struct DLX {
     return 0;
   }
 };
+
+#endif  // _DANCELINK_H_
