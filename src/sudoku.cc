@@ -46,9 +46,8 @@ int* solve_sudoku_t::solve(int* now) {
         insert(i, j, v);
       }
     }
-  if(solver.dance(1, tmp)) {
-    for(int i = 0; i < 81; i ++)
-      field[i] = tmp[i];
+  if (solver.dance(1, tmp)) {
+    for (int i = 0; i < 81; i++) field[i] = tmp[i];
     return tmp;
   }
   return nullptr;
@@ -57,25 +56,24 @@ int* solve_sudoku_t::solve(int* now) {
 int* solve_sudoku_t::generate_solution() {
   std::uniform_int_distribution<int64_t> dist(1, 9);
   std::set<int> s;
-  for (int p = 1; p <= init_cnt;) {
+  for (int p = 1; p <= init_cnt; p++) {
     int i = dist(mt);
     int j = dist(mt);
     int k = dist(mt);
     int room = (i - 1) * 3 + j;
-    int f1 = (i - 1) * 9 + k;  // task 1
+    int f1 = (i - 1) * 9 + k;              // task 1
     if (s.find(f1) != s.end()) continue;
-    int f2 = 81 + (j - 1) * 9 + k;  // task 2
+    int f2 = 81 + (j - 1) * 9 + k;         // task 2
     if (s.find(f2) != s.end()) continue;
     int f3 = 81 * 2 + (room - 1) * 9 + k;  // task 3
     if (s.find(f3) != s.end()) continue;
-    int f4 = 81 * 3 + (i - 1) * 9 + j;  // task 4
+    int f4 = 81 * 3 + (i - 1) * 9 + j;     // task 4
     if (s.find(f4) != s.end()) continue;
     s.insert(f1);
     s.insert(f2);
     s.insert(f3);
     s.insert(f4);
     field[(i - 1) * 9 + j - 1] = k;
-    p++;
   }
   return solve(field);
 }
