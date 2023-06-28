@@ -46,7 +46,11 @@ int* solve_sudoku_t::solve(int* now) {
         insert(i, j, v);
       }
     }
-  if (solver.dance(1, tmp)) return tmp;
+  if(solver.dance(1, tmp)) {
+    for(int i = 0; i < 81; i ++)
+      field[i] = tmp[i];
+    return tmp;
+  }
   return nullptr;
 }
 
@@ -143,7 +147,6 @@ std::pair<int*, int*> solve_sudoku_t::create_sudoku(int level) {
   while (solution == nullptr) {
     solution = generate_solution();
   };
-  for (int i = 0; i < 81; i++) field[i] = solution[i];
   int* puzzle = generate_puzzle(init_cnt_low, init_cnt_high);
   return std::make_pair(field, puzzle);
 }
