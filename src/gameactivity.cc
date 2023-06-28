@@ -43,7 +43,7 @@ void MainWindow::gameActivity() {
 
   sudokuOrder = 3;
   const auto order = sudokuOrder;
-  sudokuDifficulty = 1;
+  sudokuDifficulty = 3;
 
   // driverSudokuDone.store(false);
 
