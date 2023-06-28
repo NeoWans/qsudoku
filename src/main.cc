@@ -24,7 +24,7 @@ static solve_sudoku_t sudoku;
   exit(EXIT_FAILURE);
 }
 
-bool solve_game() {
+bool solve_game_helper() {
   using namespace std;
   int puzzle[ssorder];
   int n;
@@ -82,7 +82,7 @@ void gen_final() {
   }
 }
 
-void solve_game_helper() {
+void solve_game() {
   coutbuf_keeper_t _cout_buf = {nullptr};
   std::ofstream _ofs("sudoku.txt");
   _cout_buf = {std::cout.rdbuf(_ofs.rdbuf())};
@@ -94,7 +94,7 @@ void solve_game_helper() {
     _cin_buf = {std::cin.rdbuf(_ifs.rdbuf())};
   }
 
-  while (solve_game()) NULL;
+  while (solve_game_helper()) NULL;
 }
 
 signed main(int argc, char* argv[]) {
@@ -137,6 +137,6 @@ signed main(int argc, char* argv[]) {
   if (r > 0 && r > R) usage_error();
 
   if (c) gen_final();
-  else if (!s.empty()) solve_game_helper();
+  else if (!s.empty()) solve_game();
   else if (n) gen_batched_puzzle();
 }
