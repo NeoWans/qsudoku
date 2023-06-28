@@ -129,17 +129,17 @@ std::pair<int*, int*> solve_sudoku_t::create_sudoku(int level) {
   switch (level) {
     case 1 :
       init_cnt_low = 20;
-      init_cnt_high = 24;
+      init_cnt_high = 30;
       break;
 
     case 2 :
-      init_cnt_low = 25;
-      init_cnt_high = 28;
+      init_cnt_low = 31;
+      init_cnt_high = 40;
       break;
 
     case 3 :
-      init_cnt_low = 29;
-      init_cnt_high = 32;
+      init_cnt_low = 41;
+      init_cnt_high = 50;
       break;
   }
   int* solution = create_sudoku_table();
