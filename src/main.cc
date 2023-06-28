@@ -132,7 +132,7 @@ signed main(int argc, char* argv[]) {
       default : break;
     }
   }
-  if (n && ((!!m) ^ (!!r))) usage_error();
+  if (n && !(((!!m) ^ (!!r)))) usage_error();
   if ((!!r) ^ (!!R)) usage_error();
   if (r > 0 && r > R) usage_error();
 
