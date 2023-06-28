@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <list>
+#include <functional>
+#include <memory>
 
 class MainWindow final : public QMainWindow {
   Q_OBJECT
@@ -10,15 +12,16 @@ class MainWindow final : public QMainWindow {
 private:
   static constexpr int welcomeDefaultWidth = 400;
   static constexpr int welcomeDefaultHeight = 400;
-  static constexpr int gameDefaultWidth = 400;
-  static constexpr int gameDefaultHeight = 400;
+  static constexpr int gameDefaultWidth = 600;
+  static constexpr int gameDefaultHeight = 800;
 
-  int welcomeWidth = welcomeDefaultWidth;
-  int welcomeHeight = welcomeDefaultHeight;
-  int gameWidth = gameDefaultWidth;
-  int gameHeight = gameDefaultHeight;
+  std::list<std::unique_ptr<QWidget>> componentList;
+  void (MainWindow::*fitComponent)() = nullptr;
 
-  std::list<QWidget> componentList;
+  unsigned sudokuOrder;
+
+protected:
+  void resizeEvent(QResizeEvent* ev) override;
 
 public:
   explicit MainWindow(QWidget* parent = nullptr);
@@ -27,6 +30,9 @@ public:
   void launch();
 
   void welcomeActivity();
+  void fitWelcomeComponent();
+
   void gameActivity();
+  void fitGameComponent();
 };
 #endif  // MAINWINDOW_H

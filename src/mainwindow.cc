@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
-  welcomeActivity();
+  // welcomeActivity();
+  gameActivity();
 }
 
 MainWindow::~MainWindow() {
@@ -9,5 +10,9 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::launch() {
-  for (auto& component : componentList) component.show();
+  if (fitComponent != nullptr) (this->*fitComponent)();
+}
+
+void MainWindow::resizeEvent(QResizeEvent* ev) {
+  launch();
 }

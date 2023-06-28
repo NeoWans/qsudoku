@@ -12,12 +12,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
-file(GLOB PROJECT_SOURCES "src/*")
+include_directories("src")
+include_directories("extern")
+
+file(GLOB PROJECT_SOURCE "src/*")
+file(GLOB EXTERNAL_SOURCE "extern/*")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
   qt_add_executable(qsudoku
     MANUAL_FINALIZATION
-    ${PROJECT_SOURCES}
+    ${PROJECT_SOURCE}
+    ${EXTERNAL_SOURCE}
   )
 # Define target properties for Android with Qt 6 as:
 #  set_property(TARGET qsudoku APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -26,13 +31,15 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 else()
   if(ANDROID)
     add_library(qsudoku SHARED
-      ${PROJECT_SOURCES}
+      ${PROJECT_SOURCE}
+      ${EXTERNAL_SOURCE}
     )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #  set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
   else()
     add_executable(qsudoku
-      ${PROJECT_SOURCES}
+      ${PROJECT_SOURCE}
+      ${EXTERNAL_SOURCE}
     )
   endif()
 endif()
