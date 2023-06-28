@@ -30,7 +30,7 @@ signed main(int argc, char* argv[]) {
         break;
       case 's' : s = optarg; break;
       case 'n' :
-        n= atoi(optarg);
+        n = atoi(optarg);
         if (n < 1 || n > 10000) usage_error();
         break;
       case 'm' :
