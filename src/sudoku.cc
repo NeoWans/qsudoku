@@ -1,10 +1,19 @@
 #include "sudoku.h"
 
-int solve_sudo_t::get_id(int row, int col, int num) {
+void solve_sudoku_t::print(int* now) {
+  for(int i = 0; i < 9; i ++) {
+        for(int j = 0; j < 9; j ++) {
+            std::cout << *now++ << " ";
+        }
+        std::cout << "\n";
+    } 
+}
+
+int solve_sudoku_t::get_id(int row, int col, int num) {
   return (row - 1) * 9 * 9 + (col - 1) * 9 + num;
 }
 
-void solve_sudo_t::insert(int row, int col, int num) {
+void solve_sudoku_t::insert(int row, int col, int num) {
   int dx = (row - 1) / 3 + 1;
   int dy = (col - 1) / 3 + 1;
   int room = (dx - 1) * 3 + dy;
@@ -19,30 +28,30 @@ void solve_sudo_t::insert(int row, int col, int num) {
   solver.insert(id, f4);
 }
 
-int* solve_sudo_t::solve(int now[][10]) {
+int solve_sudoku_t::pos(int i, int j) {
+  return (i - 1) * 9 + j - 1;
+}
+
+int* solve_sudoku_t::solve(int* now) {
   solver.build(729, 324);
+  static int tmp[81];
+  for(int i = 0; i < 81; i ++)
+    tmp[i] = now[i];
   for (int i = 1; i <= 9; ++i)
     for (int j = 1; j <= 9; ++j) {
       for (int v = 1; v <= 9; ++v) {
-        if (now[i][j] && now[i][j] != v) continue;
+        if (tmp[pos(i, j)] && tmp[pos(i, j)] != v) continue;
         insert(i, j, v);
       }
     }
-  solver.dance(1, now);
-  return get_ans(now);
+  if(solver.dance(1, tmp))
+    return tmp;
+  return nullptr;
 }
 
-int* solve_sudo_t::get_ans(int now[][10]) {
-  static int res[81];
-  for (int i = 1; i <= 9; i++)
-    for (int j = 1; j <= 9; j++) {
-      res[(i - 1) * 9 + j - 1] = now[i][j];
-    }
-  return res;
-}
-
-int* solve_sudo_t::create_sudo_table() {
-  std::mt19937 mt;
+int* solve_sudoku_t::create_sudoku_table() {
+  static std::random_device rd;
+  static std::mt19937 mt(rd());
   std::uniform_int_distribution dist(1, 9);
   std::set<int> s;
   for (int p = 1; p <= init_cnt;) {
@@ -51,73 +60,70 @@ int* solve_sudo_t::create_sudo_table() {
     int k = dist(mt);
     int room = (i - 1) * 3 + j;
     int f1 = (i - 1) * 9 + k;              // task 1
-    if (s.find(f1) == s.end()) continue;
+    if (s.find(f1) != s.end()) continue;
     int f2 = 81 + (j - 1) * 9 + k;         // task 2
-    if (s.find(f2) == s.end()) continue;
+    if (s.find(f2) != s.end()) continue;
     int f3 = 81 * 2 + (room - 1) * 9 + k;  // task 3
-    if (s.find(f3) == s.end()) continue;
+    if (s.find(f3) != s.end()) continue;
     int f4 = 81 * 3 + (i - 1) * 9 + j;     // task 4
-    if (s.find(f4) == s.end()) continue;
+    if (s.find(f4) != s.end()) continue;
     s.insert(f1);
     s.insert(f2);
     s.insert(f3);
     s.insert(f4);
-    field[i][j] = k;
+    field[(i - 1) * 9 + j - 1] = k;
     p++;
   }
-  solve(field);
-  return get_ans(field);
+  return solve(field);
 }
 
-bool solve_sudo_t::compare(int a[81], int b[81]) {
-  for (int i = 0; i < 81; i++)
-    if (a[i] != b[i]) return false;
-  return true;
-}
-
-bool solve_sudo_t::check_unique(int r, int c, int now[][10]) {
+bool solve_sudoku_t::check_unique(int r, int c, int now[81]) {
   // 挖掉第一个位置一定有唯一解
   if (r == 1 && c == 1) return true;
 
-  int tfield[10][10];
+  int tfield[81];
 
   // 临时数组
   for (int i = 1; i <= 9; i++) {
     for (int j = 1; j <= 9; j++) {
-      tfield[i][j] = now[i][j];
+      tfield[pos(i, j)] = now[pos(i, j)];
     }
   }
-  int* fans = get_ans(field);
   // 假设挖掉这个数字
-  tfield[r][c] = 0;
+  tfield[pos(r, c)] = 0;
 
   for (int i = 1; i <= 9; i++)
-    if (i != now[r][c]) {
-      tfield[r][c] = i;
-      if (!compare(fans, solve(tfield))) return false;
+    if (i != now[pos(r, c)]) {
+      tfield[pos(r, c)] = i;
+      if (solve(tfield) != nullptr) return false;
+      tfield[pos(r, c)] = 0;
     }
   // 已尝试所有其他数字发现无解即只有唯一解
   return true;
 }
 
-int* solve_sudo_t::generate_puzzle(int low, int high) {
-  std::mt19937 mt;
+int* solve_sudoku_t::generate_puzzle(int low, int high) {
+  static std::random_device rd;
+  static std::mt19937 mt(rd());
   std::uniform_int_distribution dist(low, high);
+  std::uniform_int_distribution position(1, 9);
   int n = dist(mt);
-  int now[10][10];
+  static int tmp[81];
   for (int i = 1; i <= 9; i++)
-    for (int j = 1; j <= 9; j++) now[i][j] = field[i][j];
-  for (int i = 1; i <= 9; i++)
-    for (int j = 1; j <= 9; j++) {
-      if (n == 0) break;
-      if (check_unique(i, j, now)) {
-        now[i][j] = 0;
-        n--;
-      }
+    for (int j = 1; j <= 9; j++) tmp[pos(i, j)] = field[pos(i, j)];
+  while(n) {
+    int i = position(mt);
+    int j = position(mt);
+    if(tmp[pos(i, j)] == 0) continue;
+    if(check_unique(i, j, tmp)) {
+      tmp[pos(i, j)] = 0;
+      n --;
     }
+  }
+  return tmp;
 }
 
-std::pair<int*, int*> solve_sudo_t::create_sudo(int level) {
+std::pair<int*, int*> solve_sudoku_t::create_sudoku(int level) {
   int init_cnt_low;
   int init_cnt_high;
   switch (level) {
@@ -136,7 +142,12 @@ std::pair<int*, int*> solve_sudo_t::create_sudo(int level) {
       init_cnt_high = 32;
       break;
   }
-  int* solution = create_sudo_table();
+  int* solution = create_sudoku_table();
+  while(solution == nullptr) {
+    solution = create_sudoku_table();
+  };
+  for(int i = 0; i < 81; i ++)
+    field[i] = solution[i];
   int* puzzle = generate_puzzle(init_cnt_low, init_cnt_high);
-  return std::make_pair(solution, puzzle);
+  return std::make_pair(field, puzzle);
 }

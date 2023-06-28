@@ -44,14 +44,14 @@ struct DLX {
     L[R[c]] = R[L[c]] = c;
   }
 
-  bool dance(int dep, int now[][10]) {  // dance
+  bool dance(int dep, int* now) {  // dance
     int i, j, c = R[0];
     if (!R[0]) {
       for (i = 1; i < dep; ++i) {
         int x = (stk[i] - 1) / 9 / 9 + 1;
         int y = (stk[i] - 1) / 9 % 9 + 1;
         int v = (stk[i] - 1) % 9 + 1;
-        now[x][y] = v;
+        now[(x - 1) * 9 + y - 1] = v;
       }
       return 1;
     }
