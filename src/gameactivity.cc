@@ -3,19 +3,21 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPushButton>
+#include <QDialog>
+#include <QLabel>
 
 #include "neocc.h"
 
 #include "sudoku.h"
 
-template<typename T>
+template <typename T>
 std::string toStr(const T& i) {
   std::ostringstream oss;
   oss << i;
   return oss.str();
 }
 
-template<typename T>
+template <typename T>
 bool arrayEqual(const T& v, const T& w) {
   if (v.size() != w.size()) return false;
   size_t sz = v.size();
@@ -26,7 +28,12 @@ bool arrayEqual(const T& v, const T& w) {
 
 void MainWindow::gameActivity() {
   componentList.clear();
-  fitComponent = &MainWindow::gameFitComponent;
+  fitComponent = nullptr;
+
+  setWindowFlags(Qt::Window);
+  show();
+  setMinimumSize(0, 0);
+  setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 
   int aw = gameDefaultWidth;
   int ah = gameDefaultHeight;
@@ -34,22 +41,41 @@ void MainWindow::gameActivity() {
   setGeometry(
     (desktop->width() - aw) / 2, (desktop->height() - ah) / 2, aw, ah);
 
-  sudokuOrder = 4;
+  sudokuOrder = 3;
   const auto order = sudokuOrder;
+  sudokuDifficulty = 1;
 
-  driverSudoku.reset(new solve_sudoku_t);
-  auto res = driverSudoku->create_sudoku(sudokuDifficulty);
+  // driverSudokuDone.store(false);
 
+  // std::thread sworker([this]() {
+  //   const auto order = this->sudokuOrder;
+  auto res = this->driverSudoku->create_sudoku(this->sudokuDifficulty);
+  const size_t sz = square(square(order));
+  this->answer.resize(sz);
+  this->game.resize(sz);
+  for (size_t i = 0; i < sz; ++i) {
+    this->answer[i] = res.first[i];
+    this->game[i] = res.second[i];
+  }
+  //   driverSudokuDone.store(true);
+  // });
+  // sworker.detach();
+
+  // while (!driverSudokuDone.load()) { }
+
+  answer.resize(square(square(order)));
   game.resize(square(square(order)));
 
   for (unsigned i = 0; i < square(order); ++i)
     for (unsigned j = 0; j < square(order); ++j) {
       auto btn = new QPushButton(this);
       unsigned index = i * square(order) + j;
-      if (answer[index] != 0) {
+      if (game[index] != 0) {
         btn->setDisabled(true);
-        btn->setText(toStr(answer[index]).c_str());
+        btn->setText(toStr(game[index]).c_str());
+        btn->setStyleSheet("font-weight: bold;");
       }
+      std::cerr << answer[index] << " \n"[j + 1 == square(order)];
       connect(btn, &QPushButton::clicked, this, [this, index]() {
         if (this->gameButtonSelected != -1) {
           this->componentList[this->gameButtonSelected]->setStyleSheet(nullptr);
@@ -58,7 +84,7 @@ void MainWindow::gameActivity() {
         this->componentList[index]->setStyleSheet(
           "background-color: lightGray;");
 
-        std::cerr << index << std::endl;
+        // std::cerr << index << std::endl;
       });
       componentList.emplace_back(btn);
     }
@@ -86,6 +112,8 @@ void MainWindow::gameActivity() {
     });
     componentList.emplace_back(btn);
   }
+
+  fitComponent = &MainWindow::gameFitComponent;
   launch();
 }
 
@@ -102,7 +130,7 @@ void MainWindow::gameFitComponent() {
 
   unsigned componentCounter = 0;
 
-  for (const auto& component : componentList) {
+  for (auto& component : componentList) {
     if (componentCounter < square(sorder)) {
       auto i = componentCounter;
       component->setGeometry(bw * (i % sorder), bh * (i / sorder), bw, bh);

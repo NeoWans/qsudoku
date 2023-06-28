@@ -1,5 +1,8 @@
 #include "sudoku.h"
 
+static std::random_device rd;
+static std::mt19937 mt(rd());
+
 void solve_sudoku_t::print(int* now) {
   for(int i = 0; i < 9; i ++) {
         for(int j = 0; j < 9; j ++) {
@@ -50,8 +53,6 @@ int* solve_sudoku_t::solve(int* now) {
 }
 
 int* solve_sudoku_t::generate_solution() {
-  static std::random_device rd;
-  static std::mt19937 mt(rd());
   std::uniform_int_distribution dist(1, 9);
   std::set<int> s;
   for (int p = 1; p <= init_cnt;) {
@@ -103,8 +104,6 @@ bool solve_sudoku_t::check_unique(int r, int c, int now[81]) {
 }
 
 int* solve_sudoku_t::generate_puzzle(int low, int high) {
-  static std::random_device rd;
-  static std::mt19937 mt(rd());
   std::uniform_int_distribution dist(low, high);
   std::uniform_int_distribution position(1, 9);
   int n = dist(mt);

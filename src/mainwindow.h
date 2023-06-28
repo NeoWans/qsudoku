@@ -24,6 +24,7 @@ private:
   void (MainWindow::*fitComponent)() = nullptr;
 
   std::unique_ptr<solve_sudoku_t> driverSudoku;
+  // std::atomic<bool> driverSudokuDone;
 
   unsigned sudokuOrder;
   unsigned sudokuDifficulty;
