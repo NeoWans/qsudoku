@@ -104,8 +104,26 @@ fast_pow(T __base, unsigned long long __exponent, U __modulo) {
   return ans;
 }
 
-const auto pil = std::acos(-1.0l);
-const auto el = std::exp(1.0l);
+class cinbuf_keeper_t {
+public:
+  std::streambuf* buf;
+
+  ~cinbuf_keeper_t() {
+    if (this->buf != nullptr) std::cin.rdbuf(this->buf);
+  }
+};
+
+class coutbuf_keeper_t {
+public:
+  std::streambuf* buf;
+
+  ~coutbuf_keeper_t() {
+    if (this->buf != nullptr) std::cout.rdbuf(this->buf);
+  }
+};
+
+const auto pil = acos(-1.0l);
+const auto el = exp(1.0l);
 constexpr auto epsl = 1e-12l;
 
 #endif  // _NEOCC_H_
