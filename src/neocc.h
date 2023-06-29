@@ -108,6 +108,25 @@ class cinbuf_keeper_t final {
 public:
   std::streambuf* buf = nullptr;
 
+  cinbuf_keeper_t(std::streambuf* cinbuf = nullptr) : buf(cinbuf) {
+    NULL;
+  }
+
+  cinbuf_keeper_t(cinbuf_keeper_t&& that) noexcept {
+    buf = that.buf;
+    that.buf = nullptr;
+  }
+
+  cinbuf_keeper_t(const cinbuf_keeper_t&) = delete;
+
+  cinbuf_keeper_t& operator=(cinbuf_keeper_t&& that) noexcept {
+    buf = that.buf;
+    that.buf = nullptr;
+    return *this;
+  }
+
+  cinbuf_keeper_t& operator=(const cinbuf_keeper_t&) = delete;
+
   ~cinbuf_keeper_t() {
     if (this->buf != nullptr) std::cin.rdbuf(this->buf);
   }
@@ -116,6 +135,25 @@ public:
 class coutbuf_keeper_t final {
 public:
   std::streambuf* buf = nullptr;
+
+  coutbuf_keeper_t(std::streambuf* coutbuf = nullptr) : buf(coutbuf) {
+    NULL;
+  }
+
+  coutbuf_keeper_t(coutbuf_keeper_t&& that) noexcept {
+    buf = that.buf;
+    that.buf = nullptr;
+  }
+
+  coutbuf_keeper_t(const cinbuf_keeper_t&) = delete;
+
+  coutbuf_keeper_t& operator=(coutbuf_keeper_t&& that) noexcept {
+    buf = that.buf;
+    that.buf = nullptr;
+    return *this;
+  }
+
+  coutbuf_keeper_t& operator=(const cinbuf_keeper_t&) = delete;
 
   ~coutbuf_keeper_t() {
     if (this->buf != nullptr) std::cout.rdbuf(this->buf);

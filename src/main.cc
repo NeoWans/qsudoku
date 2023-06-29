@@ -39,6 +39,7 @@ bool solve_puzzle_helper() {
     for (unsigned j = 0; j < sorder; ++j) {
       cout << ans[i * sorder + j] << " \n"[j + 1 == sorder];
     }
+  cout << endl;
   return true;
 }
 
@@ -82,25 +83,23 @@ void gen_final() {
 }
 
 void solve_puzzle() {
-  coutbuf_keeper_t _cout_buf;
-  std::ofstream _ofs("sudoku.txt");
-  _cout_buf = {std::cout.rdbuf(_ofs.rdbuf())};
-
+  using namespace std;
+  ifstream _ifs;
   cinbuf_keeper_t _cin_buf;
-  std::ifstream _ifs;
   if (s != "-") {
     _ifs.open(s);
-    _cin_buf = {std::cin.rdbuf(_ifs.rdbuf())};
+    _cin_buf = cin.rdbuf(_ifs.rdbuf());
   }
 
-  std::cout << s << std::endl;
+  ofstream _ofs("sudoku.txt");
+  coutbuf_keeper_t _cout_buf = cout.rdbuf(_ofs.rdbuf());
 
   while (solve_puzzle_helper()) NULL;
 }
 
 signed main(int argc, char* argv[]) {
-  // std::ios::sync_with_stdio(false);
-  // std::cin.tie(nullptr);
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
   if (argc == 1 || argc == 2 && argv[1] == std::string("gui")) {
     QApplication a(argc, argv);
     MainWindow w;
