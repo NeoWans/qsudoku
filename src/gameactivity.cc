@@ -9,18 +9,12 @@
 #include "sudoku.h"
 
 template <typename T>
-std::string toStr(const T& i) {
-  std::ostringstream oss;
-  oss << i;
-  return oss.str();
-}
-
-template <typename T>
 bool arrayEqual(const T& v, const T& w) {
   if (v.size() != w.size()) return false;
-  size_t sz = v.size();
-  for (size_t i = 0; i < sz; ++i)
-    if (v[i] != w[i]) return false;
+  auto it = v.cbegin();
+  auto jt = w.cbegin();
+  while (it != v.cend())
+    if (*it++ != *jt++) return false;
   return true;
 }
 
@@ -42,7 +36,7 @@ void MainWindow::gameActivity() {
 
   sudokuOrder = 3;
   const auto order = sudokuOrder;
-  sudokuDifficulty = 3;
+  sudokuDifficulty = 1;
 
   // driverSudokuDone.store(false);
 
@@ -98,12 +92,7 @@ void MainWindow::gameActivity() {
     connect(btn, &QPushButton::clicked, this, [this, num]() {
       if (this->gameButtonSelected == -1) return;
 
-      auto i = this->gameButtonSelected;
-      auto btn = dynamic_cast<QPushButton*>(this->componentList[i].get());
-
-      game[i] = num;
-
-      btn->setText(toStr(num).c_str());
+      gameFill(num);
 
       if (arrayEqual(this->game, this->answer)) {
         std::cerr << "Game over" << std::endl;
@@ -112,6 +101,7 @@ void MainWindow::gameActivity() {
         const auto ssorder = square(square(order));
         for (size_t i = 0; i < ssorder; ++i)
           this->componentList[i]->setDisabled(true);
+        this->gameButtonSelected = -1;
       }
     });
     componentList.emplace_back(btn);

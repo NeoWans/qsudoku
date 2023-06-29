@@ -24,9 +24,9 @@ static solve_sudoku_t sudoku;
   exit(EXIT_FAILURE);
 }
 
-bool solve_game_helper() {
+bool solve_puzzle_helper() {
   using namespace std;
-  int puzzle[ssorder];
+  auto puzzle = std::make_unique<int[]>(ssorder);
   int n;
   unsigned i = 0;
   while (cin >> n) {
@@ -34,7 +34,7 @@ bool solve_game_helper() {
     if (i >= ssorder) break;
   }
   if (i < ssorder) return false;
-  auto ans = sudoku.solve(puzzle);
+  auto ans = sudoku.solve(puzzle.get());
 
   for (unsigned i = 0; i < sorder; ++i)
     for (unsigned j = 0; j < sorder; ++j) {
@@ -82,7 +82,7 @@ void gen_final() {
   }
 }
 
-void solve_game() {
+void solve_puzzle() {
   coutbuf_keeper_t _cout_buf = {nullptr};
   std::ofstream _ofs("sudoku.txt");
   _cout_buf = {std::cout.rdbuf(_ofs.rdbuf())};
@@ -94,10 +94,12 @@ void solve_game() {
     _cin_buf = {std::cin.rdbuf(_ifs.rdbuf())};
   }
 
-  while (solve_game_helper()) NULL;
+  while (solve_puzzle_helper()) NULL;
 }
 
 signed main(int argc, char* argv[]) {
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(nullptr);
   if (argc == 1 || argc == 2 && argv[1] == std::string("gui")) {
     QApplication a(argc, argv);
     MainWindow w;
@@ -137,6 +139,6 @@ signed main(int argc, char* argv[]) {
   if (r > 0 && r > R) usage_error();
 
   if (c) gen_final();
-  else if (!s.empty()) solve_game();
+  else if (!s.empty()) solve_puzzle();
   else if (n) gen_batched_puzzle();
 }

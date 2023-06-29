@@ -2,6 +2,9 @@
 #define _MAINWINDOW_H_
 
 #include <QMainWindow>
+#include <QResizeEvent>
+#include <QKeyEvent>
+
 #include <vector>
 #include <functional>
 #include <memory>
@@ -32,7 +35,10 @@ private:
   std::vector<int> game;
   std::vector<int> answer;
 
+  int gameFill(unsigned i);
+
 protected:
+  void keyPressEvent(QKeyEvent* ev) override;
   void resizeEvent(QResizeEvent* ev) override;
 
 public:
@@ -47,4 +53,12 @@ public:
   void gameActivity();
   void gameFitComponent();
 };
+
+template <typename T>
+std::string toStr(const T& i) {
+  std::ostringstream oss;
+  oss << i;
+  return oss.str();
+}
+
 #endif  // _MAINWINDOW_H_
