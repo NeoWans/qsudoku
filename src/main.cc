@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <iostream>
 
 #include "neocc.h"
 
@@ -26,7 +25,7 @@ static solve_sudoku_t sudoku;
 
 bool solve_puzzle_helper() {
   using namespace std;
-  auto puzzle = std::make_unique<int[]>(ssorder);
+  auto puzzle = make_unique<int[]>(ssorder);
   int n;
   unsigned i = 0;
   while (cin >> n) {
@@ -83,23 +82,25 @@ void gen_final() {
 }
 
 void solve_puzzle() {
-  coutbuf_keeper_t _cout_buf = {nullptr};
+  coutbuf_keeper_t _cout_buf;
   std::ofstream _ofs("sudoku.txt");
   _cout_buf = {std::cout.rdbuf(_ofs.rdbuf())};
 
-  cinbuf_keeper_t _cin_buf = {nullptr};
+  cinbuf_keeper_t _cin_buf;
   std::ifstream _ifs;
   if (s != "-") {
     _ifs.open(s);
     _cin_buf = {std::cin.rdbuf(_ifs.rdbuf())};
   }
 
+  std::cout << s << std::endl;
+
   while (solve_puzzle_helper()) NULL;
 }
 
 signed main(int argc, char* argv[]) {
-  std::ios::sync_with_stdio(false);
-  std::cin.tie(nullptr);
+  // std::ios::sync_with_stdio(false);
+  // std::cin.tie(nullptr);
   if (argc == 1 || argc == 2 && argv[1] == std::string("gui")) {
     QApplication a(argc, argv);
     MainWindow w;

@@ -104,18 +104,18 @@ fast_pow(T __base, unsigned long long __exponent, U __modulo) {
   return ans;
 }
 
-class cinbuf_keeper_t {
+class cinbuf_keeper_t final {
 public:
-  std::streambuf* buf;
+  std::streambuf* buf = nullptr;
 
   ~cinbuf_keeper_t() {
     if (this->buf != nullptr) std::cin.rdbuf(this->buf);
   }
 };
 
-class coutbuf_keeper_t {
+class coutbuf_keeper_t final {
 public:
-  std::streambuf* buf;
+  std::streambuf* buf = nullptr;
 
   ~coutbuf_keeper_t() {
     if (this->buf != nullptr) std::cout.rdbuf(this->buf);

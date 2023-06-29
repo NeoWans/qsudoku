@@ -80,3 +80,6 @@ out/
 .vscode/*
 # !.vscode/c_cpp_properties.json
 # !.vscode/launch.json
+
+puzzle.txt
+sudoku.txt
