@@ -8,7 +8,7 @@
 static int c = 0;
 static std::string s;
 static int n = 0;
-static int m = 0;
+static int m = 1;
 static int r = 0;
 static int R = 0;
 static bool u = false;
