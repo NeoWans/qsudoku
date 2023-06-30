@@ -100,7 +100,7 @@ void solve_puzzle() {
 signed main(int argc, char* argv[]) {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
-  if (argc == 1 || argc == 2 && argv[1] == std::string("gui")) {
+  if (argc == 1 || (argc == 2 && argv[1] == std::string("gui"))) {
     QApplication a(argc, argv);
     MainWindow w;
     w.show();

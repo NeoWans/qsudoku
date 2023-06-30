@@ -44,9 +44,9 @@ void MainWindow::keyPressEvent(QKeyEvent* ev) {
 
   if (gameButtonSelected == -1) return;
 
-  auto index = gameButtonSelected;
-  auto sorder = square(sudokuOrder);
-  auto ssorder = square(sorder);
+  int index = gameButtonSelected;
+  int sorder = square(sudokuOrder);
+  int ssorder = square(sorder);
 
   switch (key) {
     case Qt::Key_1 : gameFill(1); break;
