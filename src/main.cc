@@ -107,7 +107,7 @@ signed main(int argc, char* argv[]) {
     return a.exec();
   }
   int opt;
-  while (~(opt = getopt(argc, argv, "c:s:n:m:r:R:u"))) {
+  while (~(opt = getopt(argc, argv, "c:s:n:m:r:t:u"))) {
     switch (opt) {
       case 'c' :
         c = atoi(optarg);
@@ -126,7 +126,7 @@ signed main(int argc, char* argv[]) {
         r = atoi(optarg);
         if (r < 20 || r > 55) usage_error();
         break;
-      case 'R' :
+      case 't' :
         R = atoi(optarg);
         if (R < 20 || R > 55) usage_error();
         break;
